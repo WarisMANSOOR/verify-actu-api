@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Article;
+use App\Models\Notification;
+use App\Models\Like;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ArticleController;
@@ -45,4 +48,37 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
     Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
+
+    
+});
+// Ces routes servent seulement à faciliter la démonstration du projet.
+// Elles permettent de voir les données de test directement dans le navigateur.
+Route::get('/demo/articles-all', function () {
+    return response()->json([
+        'message' => 'Liste de tous les articles, y compris pending et deleted.',
+        'articles' => Article::with('journalist:id,name,email,role')
+            ->withCount('likes')
+            ->latest()
+            ->get(),
+    ]);
+});
+
+Route::get('/demo/likes', function () {
+    return response()->json([
+        'message' => 'Liste des likes de démonstration.',
+        'likes' => Like::with([
+            'user:id,name,email,role',
+            'article:id,title,status'
+        ])->get(),
+    ]);
+});
+
+Route::get('/demo/notifications', function () {
+    return response()->json([
+        'message' => 'Liste des notifications de démonstration.',
+        'notifications' => Notification::with([
+            'user:id,name,email,role',
+            'article:id,title,status'
+        ])->latest()->get(),
+    ]);
 });
