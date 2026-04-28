@@ -1,0 +1,50 @@
+services:
+  app:
+    build: .
+    container_name: verify_actu_api
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+    environment:
+      APP_NAME: VerifyActu
+      APP_ENV: local
+      APP_KEY: base64:mtssmN6sq7RZ978CBi4euFYhpfY9HTLFCV/z8beVLqA=
+      APP_DEBUG: true
+      APP_URL: http://localhost:8000
+
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: verify_actu
+      DB_USERNAME: verify_user
+      DB_PASSWORD: verify_password
+
+  db:
+    image: mysql:8.0
+    container_name: verify_actu_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: verify_actu
+      MYSQL_USER: verify_user
+      MYSQL_PASSWORD: verify_password
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - verify_actu_mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: verify_actu_phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    depends_on:
+      - db
+
+volumes:
+  verify_actu_mysql_data:
