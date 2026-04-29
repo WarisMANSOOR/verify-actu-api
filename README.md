@@ -1004,24 +1004,32 @@ docker compose ps
 ---
 ## 17. Publication de l'image Docker Hub
 
-Cette partie sera complétée après la publication de l'image Docker de l'API sur Docker Hub.
+L'image Docker de l'API Laravel a été publiée sur Docker Hub.
 
 Lien de l'image Docker Hub :
 
 ```txt
-À compléter
+https://hub.docker.com/r/warisabirpp/verify-actu-api
 ```
 
-Commande prévue pour récupérer l'image :
+Commande pour récupérer l'image depuis Docker Hub :
 
 ```bash
-docker pull NOM_UTILISATEUR_DOCKER/verify-actu-api:latest
+docker pull warisabirpp/verify-actu-api:latest
 ```
 
-Commande prévue pour lancer le projet :
+Dans ce projet, l'application se lance avec Docker Compose, car elle dépend aussi d'une base de données MySQL.
+
+Commande pour construire et lancer tous les services du projet :
 
 ```bash
-docker compose up -d
+docker compose up -d --build
+```
+
+Après le lancement des conteneurs, il faut créer les tables et insérer les données de test avec :
+
+```bash
+docker compose exec app php artisan migrate:fresh --seed
 ```
 ---
 
